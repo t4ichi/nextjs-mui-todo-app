@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export function MockProvider({
+export function MSWClientProvider({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
@@ -19,7 +19,7 @@ export function MockProvider({
 				process.env.NEXT_RUNTIME !== "nodejs" &&
 				process.env.USE_MOCK === "true"
 			) {
-				const { worker } = await import("../msw/browser");
+				const { worker } = await import("@/libs/msw/browser");
 				await worker.start();
 				enableMocking(true);
 			}

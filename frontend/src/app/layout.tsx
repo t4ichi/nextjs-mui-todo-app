@@ -1,3 +1,5 @@
+import { MSWClientProvider } from "@/libs/msw/providers/msw-client-provider";
+import { MSWServerProvider } from "@/libs/msw/providers/msw-server-provider";
 import { ThemeProvider } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { Roboto } from "next/font/google";
@@ -24,7 +26,11 @@ export default function RootLayout({
 		<html lang="ja" className={roboto.variable}>
 			<AppRouterCacheProvider>
 				<body>
-					<ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
+					<MSWServerProvider>
+						<MSWClientProvider>
+							<ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
+						</MSWClientProvider>
+					</MSWServerProvider>
 				</body>
 			</AppRouterCacheProvider>
 		</html>
