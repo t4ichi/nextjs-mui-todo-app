@@ -9,25 +9,25 @@ import "@fontsource/material-icons";
 import { darkTheme, lightTheme } from "../src/app/theme.ts";
 
 const preview: Preview = {
-	parameters: {
-		controls: {
-			matchers: {
-				color: /(background|color)$/i,
-				date: /Date$/i,
-			},
-		},
-	},
-	decorators: [
-		withThemeFromJSXProvider({
-			GlobalStyles: CssBaseline,
-			Provider: ThemeProvider,
-			themes: {
-				light: lightTheme,
-				dark: darkTheme,
-			},
-			defaultTheme: "light",
-		}),
-	],
+  parameters: {
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/i,
+      },
+    },
+  },
+  decorators: [
+    withThemeFromJSXProvider({
+      GlobalStyles: CssBaseline,
+      Provider: ThemeProvider,
+      themes: {
+        light: lightTheme,
+        dark: darkTheme,
+      },
+      defaultTheme: "light",
+    }),
+  ],
 };
 
 export default preview;

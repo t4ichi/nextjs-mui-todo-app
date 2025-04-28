@@ -6,33 +6,33 @@ import { Roboto } from "next/font/google";
 import { lightTheme } from "./theme";
 
 if (process.env.NEXT_RUNTIME === "nodejs" && process.env.USE_MOCK === "true") {
-	const { server } = require("../libs/msw/node");
-	server.listen();
+  const { server } = require("../libs/msw/node");
+  server.listen();
 }
 
 const roboto = Roboto({
-	weight: ["300", "400", "500", "700"],
-	subsets: ["latin"],
-	display: "swap",
-	variable: "--font-roboto",
+  weight: ["300", "400", "500", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-roboto",
 });
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang="ja" className={roboto.variable}>
-			<AppRouterCacheProvider>
-				<body>
-					<MSWServerProvider>
-						<MSWClientProvider>
-							<ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
-						</MSWClientProvider>
-					</MSWServerProvider>
-				</body>
-			</AppRouterCacheProvider>
-		</html>
-	);
+  return (
+    <html lang="ja" className={roboto.variable}>
+      <AppRouterCacheProvider>
+        <body>
+          <MSWServerProvider>
+            <MSWClientProvider>
+              <ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
+            </MSWClientProvider>
+          </MSWServerProvider>
+        </body>
+      </AppRouterCacheProvider>
+    </html>
+  );
 }
