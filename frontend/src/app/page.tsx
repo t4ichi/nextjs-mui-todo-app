@@ -24,6 +24,7 @@ export default async function Home() {
 
 	return (
 		<>
+			<p>test</p>
 			<Button variant="contained" color="primary">
 				Hello {user.firstName} {user.lastName}
 			</Button>
