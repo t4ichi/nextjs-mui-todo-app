@@ -1,4 +1,4 @@
-name: Build Check Frontend
+name: Frontend Tests
 
 on:
   push:
@@ -13,7 +13,7 @@ on:
       - 'frontend/**'
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -31,5 +31,7 @@ jobs:
           version: 8
       - name: Install dependencies
         run: pnpm install
-      - name: Build Next.js application
-        run: pnpm build
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Run tests
+        run: pnpm test run
