@@ -1,0 +1,37 @@
+post:
+  summary: ユーザーサインイン
+  description: メールアドレスとパスワードでサインインする
+  operationId: signIn
+  tags:
+    - Authentication
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../components/sign-in/schemas/SignInRequest.yaml'
+        examples:
+          default:
+            $ref: '../components/sign-in/examples/SignInRequest.yaml'
+  responses:
+    '200':
+      description: サインイン成功
+      content:
+        application/json:
+          schema:
+            $ref: '../components/sign-in/schemas/SignInResponse.yaml'
+          examples:
+            default:
+              $ref: '../components/sign-in/examples/SignInResponse.yaml'
+    '400':
+      description: 入力エラー
+      content:
+        application/json:
+          schema:
+            $ref: '../components/common/schemas/Error.yaml'
+    '401':
+      description: 認証失敗
+      content:
+        application/json:
+          schema:
+            $ref: '../components/common/schemas/Error.yaml'

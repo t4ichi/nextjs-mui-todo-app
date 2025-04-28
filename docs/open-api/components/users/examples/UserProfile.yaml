@@ -1,0 +1,7 @@
+value:
+  userId: "123e4567-e89b-12d3-a456-426614174000"
+  name: "Test User"
+  bio: "Todoアプリのユーザーです"
+  avatarUrl: "https://example.com/avatars/user.png"
+  createdAt: "2024-04-28T09:00:00Z"
+  updatedAt: "2024-04-28T09:00:00Z"

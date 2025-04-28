@@ -1,0 +1,241 @@
+todos:
+  get:
+    summary: Todo一覧取得
+    description: ログインユーザーのTodo一覧を取得する
+    operationId: getTodos
+    tags:
+      - Todos
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: completed
+        in: query
+        required: false
+        schema:
+          type: boolean
+        description: 完了済みタスクのみ取得する場合はtrue、未完了のみはfalse。指定なしは全て。
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+    responses:
+      '200':
+        description: Todo一覧
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: '../components/todos/schemas/Todo.yaml'
+                total:
+                  type: integer
+                offset:
+                  type: integer
+                limit:
+                  type: integer
+              required:
+                - items
+                - total
+                - offset
+                - limit
+      '401':
+        description: 認証エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+              
+  post:
+    summary: Todo作成
+    description: 新しいTodoを作成する
+    operationId: createTodo
+    tags:
+      - Todos
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/todos/schemas/CreateTodoRequest.yaml'
+          examples:
+            default:
+              $ref: '../components/todos/examples/CreateTodoRequest.yaml'
+    responses:
+      '201':
+        description: 作成されたTodo
+        content:
+          application/json:
+            schema:
+              $ref: '../components/todos/schemas/Todo.yaml'
+            examples:
+              default:
+                $ref: '../components/todos/examples/Todo.yaml'
+      '400':
+        description: 入力エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+      '401':
+        description: 認証エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+
+todos_todoId:
+  get:
+    summary: Todo詳細取得
+    description: 指定されたTodoの詳細を取得する
+    operationId: getTodo
+    tags:
+      - Todos
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: todoId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '200':
+        description: Todo詳細
+        content:
+          application/json:
+            schema:
+              $ref: '../components/todos/schemas/Todo.yaml'
+            examples:
+              default:
+                $ref: '../components/todos/examples/Todo.yaml'
+      '401':
+        description: 認証エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+      '403':
+        description: 権限エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+      '404':
+        description: Todoが見つからない
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+              
+  put:
+    summary: Todo更新
+    description: 指定されたTodoを更新する
+    operationId: updateTodo
+    tags:
+      - Todos
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: todoId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/todos/schemas/UpdateTodoRequest.yaml'
+          examples:
+            default:
+              $ref: '../components/todos/examples/UpdateTodoRequest.yaml'
+    responses:
+      '200':
+        description: 更新されたTodo
+        content:
+          application/json:
+            schema:
+              $ref: '../components/todos/schemas/Todo.yaml'
+            examples:
+              default:
+                $ref: '../components/todos/examples/Todo.yaml'
+      '400':
+        description: 入力エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+      '401':
+        description: 認証エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+      '403':
+        description: 権限エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+      '404':
+        description: Todoが見つからない
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+              
+  delete:
+    summary: Todo削除
+    description: 指定されたTodoを削除する
+    operationId: deleteTodo
+    tags:
+      - Todos
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: todoId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '204':
+        description: 削除成功
+      '401':
+        description: 認証エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+      '403':
+        description: 権限エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+      '404':
+        description: Todoが見つからない
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'

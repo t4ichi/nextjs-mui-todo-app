@@ -1,0 +1,136 @@
+users_userId:
+  get:
+    summary: ユーザー情報取得
+    description: 指定されたユーザーIDのユーザー情報を取得する
+    operationId: getUser
+    tags:
+      - Users
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '200':
+        description: ユーザー情報
+        content:
+          application/json:
+            schema:
+              $ref: '../components/users/schemas/User.yaml'
+            examples:
+              default:
+                $ref: '../components/users/examples/User.yaml'
+      '401':
+        description: 認証エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+      '404':
+        description: ユーザーが見つからない
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+
+users_userId_profile:
+  get:
+    summary: ユーザープロフィール取得
+    description: 指定されたユーザーIDのプロフィール情報を取得する
+    operationId: getUserProfile
+    tags:
+      - Users
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '200':
+        description: ユーザープロフィール
+        content:
+          application/json:
+            schema:
+              $ref: '../components/users/schemas/UserProfile.yaml'
+            examples:
+              default:
+                $ref: '../components/users/examples/UserProfile.yaml'
+      '401':
+        description: 認証エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+      '404':
+        description: ユーザーが見つからない
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+              
+  put:
+    summary: ユーザープロフィール更新
+    description: 指定されたユーザーIDのプロフィール情報を更新する
+    operationId: updateUserProfile
+    tags:
+      - Users
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/users/schemas/UpdateUserProfileRequest.yaml'
+          examples:
+            default:
+              $ref: '../components/users/examples/UpdateUserProfileRequest.yaml'
+    responses:
+      '200':
+        description: 更新後のユーザープロフィール
+        content:
+          application/json:
+            schema:
+              $ref: '../components/users/schemas/UserProfile.yaml'
+            examples:
+              default:
+                $ref: '../components/users/examples/UserProfile.yaml'
+      '400':
+        description: 入力エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+      '401':
+        description: 認証エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+      '403':
+        description: 権限エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'
+      '404':
+        description: ユーザーが見つからない
+        content:
+          application/json:
+            schema:
+              $ref: '../components/common/schemas/Error.yaml'

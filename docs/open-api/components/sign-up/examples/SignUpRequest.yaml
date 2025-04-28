@@ -1,0 +1,4 @@
+value:
+  email: "user@example.com"
+  password: "securePassword123"
+  name: "Test User"

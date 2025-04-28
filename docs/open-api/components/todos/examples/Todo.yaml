@@ -1,0 +1,9 @@
+value:
+  id: "abc12345-e89b-12d3-a456-426614174000"
+  userId: "123e4567-e89b-12d3-a456-426614174000"
+  title: "API設計を完了する"
+  description: "TodoアプリのAPI設計を完了させる"
+  completed: false
+  dueDate: "2024-05-01T18:00:00Z"
+  createdAt: "2024-04-28T09:00:00Z"
+  updatedAt: "2024-04-28T09:00:00Z"

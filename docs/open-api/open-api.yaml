@@ -1,0 +1,42 @@
+openapi: 3.0.3
+info:
+  title: Todo App API
+  description: Todo管理アプリケーションのAPI
+  version: 1.0.0
+servers:
+  - url: https://api.todo-app.example
+    description: 本番環境
+  - url: https://staging.todo-app.example
+    description: ステージング環境
+
+paths:
+  # ユーザー登録
+  /sign-up:
+    $ref: './paths/sign-up.yaml'
+  
+  # ユーザーサインイン
+  /sign-in:
+    $ref: './paths/sign-in.yaml'
+  
+  # ユーザー関連エンドポイント
+  /users/{userId}:
+    $ref: './paths/users.yaml#/users_userId'
+  /users/{userId}/profile:
+    $ref: './paths/users.yaml#/users_userId_profile'
+  
+  # Todo関連エンドポイント
+  /todos:
+    $ref: './paths/todos.yaml#/todos'
+  /todos/{todoId}:
+    $ref: './paths/todos.yaml#/todos_todoId'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+  schemas:
+    Error:
+      $ref: './components/common/schemas/Error.yaml'
