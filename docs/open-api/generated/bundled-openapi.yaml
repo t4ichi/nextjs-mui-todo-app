@@ -1,0 +1,703 @@
+openapi: 3.0.3
+info:
+  title: Todo App API
+  description: Todo管理アプリケーションのAPI
+  version: 1.0.0
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://api.todo-app.example
+    description: 本番環境
+  - url: https://staging.todo-app.example
+    description: ステージング環境
+paths:
+  /sign-up:
+    post:
+      summary: ユーザー登録
+      description: 新規ユーザー登録を行う
+      operationId: signUp
+      tags:
+        - Authentication
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpRequest'
+            examples:
+              default:
+                $ref: '#/components/examples/SignUpRequest'
+      responses:
+        '201':
+          description: 登録成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignUpResponse'
+              examples:
+                default:
+                  $ref: '#/components/examples/SignUpResponse'
+        '400':
+          description: 入力エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: メールアドレスがすでに使用されている
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /sign-in:
+    post:
+      summary: ユーザーサインイン
+      description: メールアドレスとパスワードでサインインする
+      operationId: signIn
+      tags:
+        - Authentication
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+            examples:
+              default:
+                $ref: '#/components/examples/SignInRequest'
+      responses:
+        '200':
+          description: サインイン成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignInResponse'
+              examples:
+                default:
+                  $ref: '#/components/examples/SignInResponse'
+        '400':
+          description: 入力エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: 認証失敗
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{userId}:
+    get:
+      summary: ユーザー情報取得
+      description: 指定されたユーザーIDのユーザー情報を取得する
+      operationId: getUser
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: ユーザー情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                default:
+                  $ref: '#/components/examples/User'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: ユーザーが見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{userId}/profile:
+    get:
+      summary: ユーザープロフィール取得
+      description: 指定されたユーザーIDのプロフィール情報を取得する
+      operationId: getUserProfile
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: ユーザープロフィール
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+              examples:
+                default:
+                  $ref: '#/components/examples/UserProfile'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: ユーザーが見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: ユーザープロフィール更新
+      description: 指定されたユーザーIDのプロフィール情報を更新する
+      operationId: updateUserProfile
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserProfileRequest'
+            examples:
+              default:
+                $ref: '#/components/examples/UpdateUserProfileRequest'
+      responses:
+        '200':
+          description: 更新後のユーザープロフィール
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+              examples:
+                default:
+                  $ref: '#/components/examples/UserProfile'
+        '400':
+          description: 入力エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 権限エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: ユーザーが見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /todos:
+    get:
+      summary: Todo一覧取得
+      description: ログインユーザーのTodo一覧を取得する
+      operationId: getTodos
+      tags:
+        - Todos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: completed
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 完了済みタスクのみ取得する場合はtrue、未完了のみはfalse。指定なしは全て。
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Todo一覧
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Todo'
+                  total:
+                    type: integer
+                  offset:
+                    type: integer
+                  limit:
+                    type: integer
+                required:
+                  - items
+                  - total
+                  - offset
+                  - limit
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Todo作成
+      description: 新しいTodoを作成する
+      operationId: createTodo
+      tags:
+        - Todos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTodoRequest'
+            examples:
+              default:
+                $ref: '#/components/examples/CreateTodoRequest'
+      responses:
+        '201':
+          description: 作成されたTodo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+              examples:
+                default:
+                  $ref: '#/components/examples/Todo'
+        '400':
+          description: 入力エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /todos/{todoId}:
+    get:
+      summary: Todo詳細取得
+      description: 指定されたTodoの詳細を取得する
+      operationId: getTodo
+      tags:
+        - Todos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: todoId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Todo詳細
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+              examples:
+                default:
+                  $ref: '#/components/examples/Todo'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 権限エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Todoが見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Todo更新
+      description: 指定されたTodoを更新する
+      operationId: updateTodo
+      tags:
+        - Todos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: todoId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTodoRequest'
+            examples:
+              default:
+                $ref: '#/components/examples/UpdateTodoRequest'
+      responses:
+        '200':
+          description: 更新されたTodo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+              examples:
+                default:
+                  $ref: '#/components/examples/Todo'
+        '400':
+          description: 入力エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 権限エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Todoが見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Todo削除
+      description: 指定されたTodoを削除する
+      operationId: deleteTodo
+      tags:
+        - Todos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: todoId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: 削除成功
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 権限エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Todoが見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+      required:
+        - code
+        - message
+    SignUpRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          minLength: 8
+        name:
+          type: string
+      required:
+        - email
+        - password
+        - name
+    SignUpResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        token:
+          type: string
+      required:
+        - userId
+        - token
+    SignInRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      required:
+        - email
+        - password
+    SignInResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        token:
+          type: string
+      required:
+        - userId
+        - token
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - email
+        - name
+        - createdAt
+        - updatedAt
+    UserProfile:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        bio:
+          type: string
+        avatarUrl:
+          type: string
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - userId
+        - name
+        - createdAt
+        - updatedAt
+    UpdateUserProfileRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        bio:
+          type: string
+        avatarUrl:
+          type: string
+          format: uri
+    Todo:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        completed:
+          type: boolean
+          default: false
+        dueDate:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - title
+        - completed
+        - createdAt
+        - updatedAt
+    CreateTodoRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        dueDate:
+          type: string
+          format: date-time
+      required:
+        - title
+    UpdateTodoRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        completed:
+          type: boolean
+        dueDate:
+          type: string
+          format: date-time
+  examples:
+    SignUpRequest:
+      value:
+        email: user@example.com
+        password: securePassword123
+        name: Test User
+    SignUpResponse:
+      value:
+        userId: 123e4567-e89b-12d3-a456-426614174000
+        token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+    SignInRequest:
+      value:
+        email: user@example.com
+        password: securePassword123
+    SignInResponse:
+      value:
+        userId: 123e4567-e89b-12d3-a456-426614174000
+        token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+    User:
+      value:
+        id: 123e4567-e89b-12d3-a456-426614174000
+        email: user@example.com
+        name: Test User
+        createdAt: '2024-04-28T09:00:00Z'
+        updatedAt: '2024-04-28T09:00:00Z'
+    UserProfile:
+      value:
+        userId: 123e4567-e89b-12d3-a456-426614174000
+        name: Test User
+        bio: Todoアプリのユーザーです
+        avatarUrl: https://example.com/avatars/user.png
+        createdAt: '2024-04-28T09:00:00Z'
+        updatedAt: '2024-04-28T09:00:00Z'
+    UpdateUserProfileRequest:
+      value:
+        name: Updated User Name
+        bio: プロフィールの更新テスト
+        avatarUrl: https://example.com/avatars/updated.png
+    CreateTodoRequest:
+      value:
+        title: API設計を完了する
+        description: TodoアプリのAPI設計を完了させる
+        dueDate: '2024-05-01T18:00:00Z'
+    Todo:
+      value:
+        id: abc12345-e89b-12d3-a456-426614174000
+        userId: 123e4567-e89b-12d3-a456-426614174000
+        title: API設計を完了する
+        description: TodoアプリのAPI設計を完了させる
+        completed: false
+        dueDate: '2024-05-01T18:00:00Z'
+        createdAt: '2024-04-28T09:00:00Z'
+        updatedAt: '2024-04-28T09:00:00Z'
+    UpdateTodoRequest:
+      value:
+        title: API設計を完了する（更新）
+        description: TodoアプリのAPI設計を完了させる（説明更新）
+        completed: true
+        dueDate: '2024-05-02T18:00:00Z'

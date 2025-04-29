@@ -3,6 +3,9 @@ info:
   title: Todo App API
   description: Todo管理アプリケーションのAPI
   version: 1.0.0
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 servers:
   - url: https://api.todo-app.example
     description: 本番環境

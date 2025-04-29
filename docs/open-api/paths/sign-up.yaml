@@ -4,6 +4,7 @@ post:
   operationId: signUp
   tags:
     - Authentication
+  security: []
   requestBody:
     required: true
     content:

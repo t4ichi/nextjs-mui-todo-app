@@ -4,6 +4,7 @@ post:
   operationId: signIn
   tags:
     - Authentication
+  security: []
   requestBody:
     required: true
     content:
