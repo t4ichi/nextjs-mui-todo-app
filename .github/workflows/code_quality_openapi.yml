@@ -1,0 +1,37 @@
+name: OpenAPI Lint
+
+on:
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - 'docs/open-api/**'
+  pull_request:
+    branches-ignore:
+      - main
+    paths:
+      - 'docs/open-api/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Install dependencies
+        run: pnpm install
+      - name: Install Redocly CLI
+        run: pnpm add  @redocly/cli@latest
+      - name: Lint OpenAPI spec
+        run: pnpm redocly lint open-api/openapi.yaml
