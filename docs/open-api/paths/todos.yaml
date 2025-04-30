@@ -57,7 +57,7 @@ todos:
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
               
   post:
     summary: Todo作成
@@ -91,13 +91,13 @@ todos:
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
       '401':
         description: 認証エラー
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
 
 todos_todoId:
   get:
@@ -130,19 +130,19 @@ todos_todoId:
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
       '403':
         description: 権限エラー
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
       '404':
         description: Todoが見つからない
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
               
   put:
     summary: Todo更新
@@ -183,25 +183,25 @@ todos_todoId:
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
       '401':
         description: 認証エラー
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
       '403':
         description: 権限エラー
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
       '404':
         description: Todoが見つからない
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
               
   delete:
     summary: Todo削除
@@ -226,16 +226,16 @@ todos_todoId:
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
       '403':
         description: 権限エラー
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
       '404':
         description: Todoが見つからない
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'

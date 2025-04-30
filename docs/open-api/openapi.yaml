@@ -42,4 +42,4 @@ components:
   
   schemas:
     Error:
-      $ref: './components/common/schemas/Error.yaml'
+      $ref: './components/common/schemas/ApiError.yaml'

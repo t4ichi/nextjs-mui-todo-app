@@ -29,10 +29,10 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../components/common/schemas/Error.yaml'
+            $ref: '../components/common/schemas/ApiError.yaml'
     '401':
       description: 認証失敗
       content:
         application/json:
           schema:
-            $ref: '../components/common/schemas/Error.yaml'
+            $ref: '../components/common/schemas/ApiError.yaml'

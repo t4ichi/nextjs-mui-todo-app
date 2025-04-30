@@ -29,10 +29,10 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../components/common/schemas/Error.yaml'
+            $ref: '../components/common/schemas/ApiError.yaml'
     '409':
       description: メールアドレスがすでに使用されている
       content:
         application/json:
           schema:
-            $ref: '../components/common/schemas/Error.yaml'
+            $ref: '../components/common/schemas/ApiError.yaml'

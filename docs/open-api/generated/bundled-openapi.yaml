@@ -44,13 +44,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '409':
           description: メールアドレスがすでに使用されている
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
   /sign-in:
     post:
       summary: ユーザーサインイン
@@ -83,13 +83,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '401':
           description: 認証失敗
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
   /users/{userId}:
     get:
       summary: ユーザー情報取得
@@ -121,13 +121,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: ユーザーが見つからない
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
   /users/{userId}/profile:
     get:
       summary: ユーザープロフィール取得
@@ -159,13 +159,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: ユーザーが見つからない
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
     put:
       summary: ユーザープロフィール更新
       description: 指定されたユーザーIDのプロフィール情報を更新する
@@ -205,25 +205,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '401':
           description: 認証エラー
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '403':
           description: 権限エラー
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: ユーザーが見つからない
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
   /todos:
     get:
       summary: Todo一覧取得
@@ -283,7 +283,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
     post:
       summary: Todo作成
       description: 新しいTodoを作成する
@@ -316,13 +316,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '401':
           description: 認証エラー
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
   /todos/{todoId}:
     get:
       summary: Todo詳細取得
@@ -354,19 +354,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '403':
           description: 権限エラー
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: Todoが見つからない
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
     put:
       summary: Todo更新
       description: 指定されたTodoを更新する
@@ -406,25 +406,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '401':
           description: 認証エラー
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '403':
           description: 権限エラー
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: Todoが見つからない
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
     delete:
       summary: Todo削除
       description: 指定されたTodoを削除する
@@ -448,19 +448,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '403':
           description: 権限エラー
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: Todoが見つからない
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
 components:
   securitySchemes:
     bearerAuth:
@@ -469,16 +469,7 @@ components:
       bearerFormat: JWT
   schemas:
     Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-      required:
-        - code
-        - message
+      $ref: '#/components/schemas/ApiError'
     SignUpRequest:
       type: object
       properties:
@@ -506,6 +497,17 @@ components:
       required:
         - userId
         - token
+    ApiError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+      required:
+        - code
+        - message
     SignInRequest:
       type: object
       properties:

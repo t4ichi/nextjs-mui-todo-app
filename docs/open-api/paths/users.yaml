@@ -29,13 +29,13 @@ users_userId:
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
       '404':
         description: ユーザーが見つからない
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
 
 users_userId_profile:
   get:
@@ -68,13 +68,13 @@ users_userId_profile:
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
       '404':
         description: ユーザーが見つからない
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
               
   put:
     summary: ユーザープロフィール更新
@@ -115,22 +115,22 @@ users_userId_profile:
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
       '401':
         description: 認証エラー
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
       '403':
         description: 権限エラー
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
       '404':
         description: ユーザーが見つからない
         content:
           application/json:
             schema:
-              $ref: '../components/common/schemas/Error.yaml'
+              $ref: '../components/common/schemas/ApiError.yaml'
