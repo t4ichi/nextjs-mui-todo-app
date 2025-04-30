@@ -5,60 +5,64 @@
  * Todo管理アプリケーションのAPI
  * OpenAPI spec version: 1.0.0
  */
-import { z as zod } from "zod";
+import {
+  z as zod
+} from 'zod';
+
 
 /**
  * 指定されたユーザーIDのユーザー情報を取得する
  * @summary ユーザー情報取得
  */
 export const getUserParams = zod.object({
-  userId: zod.string().uuid(),
-});
+  "userId": zod.string().uuid()
+})
 
 export const getUserResponse = zod.object({
-  id: zod.string().uuid(),
-  email: zod.string().email(),
-  name: zod.string(),
-  createdAt: zod.string().datetime({}),
-  updatedAt: zod.string().datetime({}),
-});
+  "id": zod.string().uuid(),
+  "email": zod.string().email(),
+  "name": zod.string(),
+  "createdAt": zod.string().datetime({}),
+  "updatedAt": zod.string().datetime({})
+})
 
 /**
  * 指定されたユーザーIDのプロフィール情報を取得する
  * @summary ユーザープロフィール取得
  */
 export const getUserProfileParams = zod.object({
-  userId: zod.string().uuid(),
-});
+  "userId": zod.string().uuid()
+})
 
 export const getUserProfileResponse = zod.object({
-  userId: zod.string().uuid(),
-  name: zod.string(),
-  bio: zod.string().optional(),
-  avatarUrl: zod.string().url().optional(),
-  createdAt: zod.string().datetime({}),
-  updatedAt: zod.string().datetime({}),
-});
+  "userId": zod.string().uuid(),
+  "name": zod.string(),
+  "bio": zod.string().optional(),
+  "avatarUrl": zod.string().url().optional(),
+  "createdAt": zod.string().datetime({}),
+  "updatedAt": zod.string().datetime({})
+})
 
 /**
  * 指定されたユーザーIDのプロフィール情報を更新する
  * @summary ユーザープロフィール更新
  */
 export const updateUserProfileParams = zod.object({
-  userId: zod.string().uuid(),
-});
+  "userId": zod.string().uuid()
+})
 
 export const updateUserProfileBody = zod.object({
-  name: zod.string().optional(),
-  bio: zod.string().optional(),
-  avatarUrl: zod.string().url().optional(),
-});
+  "name": zod.string().optional(),
+  "bio": zod.string().optional(),
+  "avatarUrl": zod.string().url().optional()
+})
 
 export const updateUserProfileResponse = zod.object({
-  userId: zod.string().uuid(),
-  name: zod.string(),
-  bio: zod.string().optional(),
-  avatarUrl: zod.string().url().optional(),
-  createdAt: zod.string().datetime({}),
-  updatedAt: zod.string().datetime({}),
-});
+  "userId": zod.string().uuid(),
+  "name": zod.string(),
+  "bio": zod.string().optional(),
+  "avatarUrl": zod.string().url().optional(),
+  "createdAt": zod.string().datetime({}),
+  "updatedAt": zod.string().datetime({})
+})
+

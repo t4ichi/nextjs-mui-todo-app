@@ -7,7 +7,15 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "ignore": ["node_modules", ".next", "dist", "build", "coverage", "public"]
+    "ignore": [
+      "node_modules",
+      ".next",
+      "dist",
+      "build",
+      "coverage",
+      "public",
+      "libs/orval"
+    ]
   },
   "formatter": {
     "enabled": true,

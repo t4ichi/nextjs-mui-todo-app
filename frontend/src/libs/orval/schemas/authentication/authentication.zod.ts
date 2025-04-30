@@ -5,7 +5,10 @@
  * Todo管理アプリケーションのAPI
  * OpenAPI spec version: 1.0.0
  */
-import { z as zod } from "zod";
+import {
+  z as zod
+} from 'zod';
+
 
 /**
  * 新規ユーザー登録を行う
@@ -13,22 +16,24 @@ import { z as zod } from "zod";
  */
 export const signUpBodyPasswordMin = 8;
 
+
 export const signUpBody = zod.object({
-  email: zod.string().email(),
-  password: zod.string().min(signUpBodyPasswordMin),
-  name: zod.string(),
-});
+  "email": zod.string().email(),
+  "password": zod.string().min(signUpBodyPasswordMin),
+  "name": zod.string()
+})
 
 /**
  * メールアドレスとパスワードでサインインする
  * @summary ユーザーサインイン
  */
 export const signInBody = zod.object({
-  email: zod.string().email(),
-  password: zod.string(),
-});
+  "email": zod.string().email(),
+  "password": zod.string()
+})
 
 export const signInResponse = zod.object({
-  userId: zod.string().uuid(),
-  token: zod.string(),
-});
+  "userId": zod.string().uuid(),
+  "token": zod.string()
+})
+
