@@ -1,14 +1,24 @@
-"use client";
-
-import type { TodoResponse } from "@/features/todo/types";
-import { Box, Pagination, Stack, Typography } from "@mui/material";
-import { TodoItem } from "../todo-item/todo-item";
+import {
+  Box,
+  CircularProgress,
+  Pagination,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { useForm } from "@tanstack/react-form";
+import type { Todo } from "../../types";
+import { TodoItem } from "../todo-item";
 
 interface TodoListProps {
-  items: TodoResponse[];
+  items: Todo[];
   total: number;
   page: number;
   limit: number;
+  isLoading?: boolean;
+  onPageChange: (page: number) => void;
+  onToggleComplete: (id: string) => void;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 export const TodoList: React.FC<TodoListProps> = ({
@@ -16,8 +26,31 @@ export const TodoList: React.FC<TodoListProps> = ({
   total,
   page,
   limit,
+  isLoading = false,
+  onPageChange,
+  onToggleComplete,
+  onEdit,
+  onDelete,
 }) => {
   const pageCount = Math.ceil(total / limit);
+
+  // ページネーションフォーム（TanStack Form）
+  const paginationForm = useForm({
+    defaultValues: {
+      currentPage: page,
+    },
+    onSubmit: async ({ value }) => {
+      onPageChange(value.currentPage);
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" my={4}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -46,20 +79,28 @@ export const TodoList: React.FC<TodoListProps> = ({
             completed={todo.completed}
             dueDate={todo.dueDate}
             createdAt={todo.createdAt}
-            onToggleComplete={() => {}}
-            onEdit={() => {}}
-            onDelete={() => {}}
+            onToggleComplete={onToggleComplete}
+            onEdit={onEdit}
+            onDelete={onDelete}
           />
         ))}
       </Box>
       {pageCount > 1 && (
         <Box display="flex" justifyContent="center" mt={2}>
-          <Pagination
-            count={pageCount}
-            page={page}
-            onChange={() => {}}
-            color="primary"
-          />
+          <paginationForm.Field name="currentPage">
+            {(field) => (
+              <Pagination
+                count={pageCount}
+                page={field.state.value}
+                onChange={(_, value) => {
+                  field.handleChange(value);
+                  paginationForm.handleSubmit();
+                }}
+                color="primary"
+                disabled={isLoading}
+              />
+            )}
+          </paginationForm.Field>
         </Box>
       )}
     </Stack>

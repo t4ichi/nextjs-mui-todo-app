@@ -1,4 +1,3 @@
-import type { TodoResponse } from "@/features/todo/types";
 import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
 import {
   Box,
@@ -10,10 +9,12 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { useForm } from "@tanstack/react-form";
 import dayjs from "dayjs";
+import type { Todo } from "../../types";
 
 type TodoItemProps = Pick<
-  TodoResponse,
+  Todo,
   "id" | "title" | "description" | "completed" | "dueDate" | "createdAt"
 > & {
   onToggleComplete: (id: string) => void;
@@ -32,6 +33,16 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   onEdit,
   onDelete,
 }) => {
+  // Todo項目のフォーム状態管理
+  const form = useForm({
+    defaultValues: {
+      completed,
+    },
+    onSubmit: async () => {
+      onToggleComplete(id);
+    },
+  });
+
   const formatDate = (date: string) => {
     return dayjs(date).format("YYYY/MM/DD HH:mm");
   };
@@ -42,7 +53,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
     <Card
       sx={{
         mb: 2,
-        opacity: completed ? 0.7 : 1,
+        opacity: form.state.values.completed ? 0.7 : 1,
         transition: "opacity 0.3s",
       }}
     >
@@ -53,17 +64,26 @@ export const TodoItem: React.FC<TodoItemProps> = ({
           justifyContent="space-between"
         >
           <Box display="flex" alignItems="flex-start" flex={1}>
-            <Checkbox
-              checked={completed}
-              onChange={() => onToggleComplete(id)}
-              sx={{ mt: -0.5 }}
-            />
+            <form.Field name="completed">
+              {(field) => (
+                <Checkbox
+                  checked={field.state.value}
+                  onChange={(e) => {
+                    field.handleChange(e.target.checked);
+                    form.handleSubmit();
+                  }}
+                  sx={{ mt: -0.5 }}
+                />
+              )}
+            </form.Field>
             <Box>
               <Typography
                 variant="h6"
                 component="div"
                 sx={{
-                  textDecoration: completed ? "line-through" : "none",
+                  textDecoration: form.state.values.completed
+                    ? "line-through"
+                    : "none",
                 }}
               >
                 {title}

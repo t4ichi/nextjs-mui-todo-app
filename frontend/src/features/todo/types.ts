@@ -1,3 +1,3 @@
-import type { z } from "zod";
+import type { Todo as GeneratedTodo } from "@/libs/orval/schemas";
 
-export type TodoResponse = z.infer<typeof Todo>;
+export type Todo = GeneratedTodo;

@@ -1,4 +1,4 @@
-import { todoHandlers } from "@/features/todo/mock";
+import { todoHandlers } from "@/features/todo/mocks";
 import { http, HttpResponse } from "msw";
 
 export const handlers = [

@@ -1,82 +1,53 @@
-import { action } from "@storybook/addon-actions";
 import type { Meta, StoryObj } from "@storybook/react";
+import dayjs from "dayjs";
 import { TodoItem } from "./todo-item";
 
-const meta = {
-  title: "features/todo/components/TodoItem",
+const meta: Meta<typeof TodoItem> = {
+  title: "features/todo/components/todo-item",
   component: TodoItem,
-  parameters: {
-    layout: "centered",
-  },
-  tags: ["autodocs"],
-  argTypes: {
-    onToggleComplete: { action: "onToggleComplete" },
-    onEdit: { action: "onEdit" },
-    onDelete: { action: "onDelete" },
-  },
-} satisfies Meta<typeof TodoItem>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof TodoItem>;
 
-const baseArgs = {
-  id: "123e4567-e89b-12d3-a456-426614174000",
-  title: "プロジェクトの計画を立てる",
-  createdAt: new Date().toISOString(),
-  onToggleComplete: action("onToggleComplete"),
-  onEdit: action("onEdit"),
-  onDelete: action("onDelete"),
+const commonProps = {
+  onToggleComplete: (id: string) => alert(`Toggle complete: ${id}`),
+  onEdit: (id: string) => alert(`Edit: ${id}`),
+  onDelete: (id: string) => alert(`Delete: ${id}`),
 };
 
 export const Default: Story = {
   args: {
-    ...baseArgs,
+    id: "1",
+    title: "買い物に行く",
+    description: "牛乳、卵、パンを買う",
     completed: false,
-  },
-};
-
-export const WithDescription: Story = {
-  args: {
-    ...baseArgs,
-    completed: false,
-    description: "プロジェクトの目標、スケジュール、必要なリソースを明確にする",
+    createdAt: dayjs().subtract(1, "day").toISOString(),
+    dueDate: dayjs().add(2, "day").toISOString(),
+    ...commonProps,
   },
 };
 
 export const Completed: Story = {
   args: {
-    ...baseArgs,
+    id: "2",
+    title: "本を読む",
+    description: "『Clean Code』の第3章まで読む",
     completed: true,
-    description: "プロジェクトの目標、スケジュール、必要なリソースを明確にする",
+    createdAt: dayjs().subtract(3, "day").toISOString(),
+    dueDate: dayjs().add(1, "day").toISOString(),
+    ...commonProps,
   },
 };
 
-export const WithDueDate: Story = {
+export const Overdue: Story = {
   args: {
-    ...baseArgs,
+    id: "3",
+    title: "プロジェクト提出",
+    description: "クライアントに資料を送る",
     completed: false,
-    description: "プロジェクトの目標、スケジュール、必要なリソースを明確にする",
-    dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 明日
-  },
-};
-
-export const PastDueDate: Story = {
-  args: {
-    ...baseArgs,
-    completed: false,
-    description: "プロジェクトの目標、スケジュール、必要なリソースを明確にする",
-    dueDate: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // 昨日
-  },
-};
-
-export const LongContent: Story = {
-  args: {
-    ...baseArgs,
-    title:
-      "これは非常に長いタイトルです。長いタイトルがどのように表示されるかを確認するためのテストケースです。",
-    description:
-      "これは非常に長い説明文です。長い説明文がどのように表示されるかを確認するためのテストケースです。複数行になる場合の表示を確認します。これは非常に長い説明文です。長い説明文がどのように表示されるかを確認するためのテストケースです。",
-    completed: false,
-    dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+    createdAt: dayjs().subtract(5, "day").toISOString(),
+    dueDate: dayjs().subtract(1, "day").toISOString(),
+    ...commonProps,
   },
 };

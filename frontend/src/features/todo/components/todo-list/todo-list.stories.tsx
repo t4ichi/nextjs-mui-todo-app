@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { TodoList } from "./todo-list";
 
 const meta = {
-  title: "features/todo/components/TodoList",
+  title: "features/todo/components/todo-list",
   component: TodoList,
   parameters: {
     layout: "padded",
