@@ -1,4 +1,6 @@
-import type { TodoResponse } from "@/features/types";
+"use client";
+
+import type { TodoResponse } from "@/features/todo/types";
 import { Box, Pagination, Stack, Typography } from "@mui/material";
 import { TodoItem } from "../todo-item/todo-item";
 
@@ -7,10 +9,6 @@ interface TodoListProps {
   total: number;
   page: number;
   limit: number;
-  onPageChange: (page: number) => void;
-  onToggleComplete: (id: string) => void;
-  onEdit: (id: string) => void;
-  onDelete: (id: string) => void;
 }
 
 export const TodoList: React.FC<TodoListProps> = ({
@@ -18,10 +16,6 @@ export const TodoList: React.FC<TodoListProps> = ({
   total,
   page,
   limit,
-  onPageChange,
-  onToggleComplete,
-  onEdit,
-  onDelete,
 }) => {
   const pageCount = Math.ceil(total / limit);
 
@@ -52,9 +46,9 @@ export const TodoList: React.FC<TodoListProps> = ({
             completed={todo.completed}
             dueDate={todo.dueDate}
             createdAt={todo.createdAt}
-            onToggleComplete={onToggleComplete}
-            onEdit={onEdit}
-            onDelete={onDelete}
+            onToggleComplete={() => {}}
+            onEdit={() => {}}
+            onDelete={() => {}}
           />
         ))}
       </Box>
@@ -63,7 +57,7 @@ export const TodoList: React.FC<TodoListProps> = ({
           <Pagination
             count={pageCount}
             page={page}
-            onChange={(_, value) => onPageChange(value)}
+            onChange={() => {}}
             color="primary"
           />
         </Box>

@@ -1,3 +1,4 @@
+import { todoHandlers } from "@/features/todo/mock";
 import { http, HttpResponse } from "msw";
 
 export const handlers = [
@@ -10,4 +11,5 @@ export const handlers = [
       lastName: "Maverick",
     });
   }),
+  ...todoHandlers,
 ];

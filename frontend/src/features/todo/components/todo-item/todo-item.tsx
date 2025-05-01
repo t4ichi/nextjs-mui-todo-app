@@ -1,4 +1,4 @@
-import type { TodoResponse } from "@/features/types";
+import type { TodoResponse } from "@/features/todo/types";
 import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
 import {
   Box,
