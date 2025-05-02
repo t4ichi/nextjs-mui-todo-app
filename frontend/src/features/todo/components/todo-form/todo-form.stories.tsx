@@ -30,7 +30,8 @@ type Story = StoryObj<typeof meta>;
 export const Create: Story = {
   args: {
     todoId: "",
-    onSubmitSuccessAction: () => alert("Submit Success!"),
+    onSubmit: () => alert("Submit Success!"),
+    onCancel: () => alert("Cancel!"),
   },
   parameters: {
     msw: {
@@ -42,7 +43,8 @@ export const Create: Story = {
 export const Edit: Story = {
   args: {
     todoId: "abc12345-e89b-12d3-a456-426614174000",
-    onSubmitSuccessAction: () => alert("Submit Success!"),
+    onSubmit: () => alert("Submit Success!"),
+    onCancel: () => alert("Cancel!"),
     initialData: {
       title: "Sample Todo",
       description: "This is a sample todo item.",
@@ -61,7 +63,8 @@ export const Edit: Story = {
 export const LoadingError: Story = {
   args: {
     todoId: "",
-    onSubmitSuccessAction: () => alert("Submit Error!"),
+    onSubmit: () => alert("Submit Error!"),
+    onCancel: () => alert("Cancel!"),
   },
   parameters: {
     msw: {

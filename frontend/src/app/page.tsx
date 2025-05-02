@@ -1,10 +1,13 @@
+import { getTodos } from "@/features/todo/actions";
+import { TodoCreateButton } from "@/features/todo/components/todo-create-button";
 import { TodoListContainer } from "@/features/todo/components/todo-list/todo-list-container";
-import { getTodos } from "@/features/todo/fetchers";
+import { Container, Typography } from "@mui/material";
 import { Suspense } from "react";
 
 type TodoProps = {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 };
+
 export default async function TodosPage({ searchParams }: TodoProps) {
   const params = (await searchParams) ?? {};
   const page = Number(params?.page) || 1;
@@ -21,14 +24,29 @@ export default async function TodosPage({ searchParams }: TodoProps) {
 
   return (
     <main>
-      <h1>Todo一覧</h1>
-      <Suspense fallback={<div>Loading...</div>}>
-        <TodoListContainer
-          initialData={{ ...result.value, page }}
-          initialPage={page}
-          initialLimit={limit}
-        />
-      </Suspense>
+      <Container
+        maxWidth="md"
+        sx={{
+          minHeight: "80vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+        }}
+      >
+        <Typography variant="h4" component="h1" align="center" gutterBottom>
+          Todoリスト
+        </Typography>
+        <Suspense fallback={<div>Loading...</div>}>
+          <TodoCreateButton />
+          <TodoListContainer
+            initialData={{ ...result.value, page }}
+            initialPage={page}
+            initialLimit={limit}
+          />
+        </Suspense>
+      </Container>
     </main>
   );
 }

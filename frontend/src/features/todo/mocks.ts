@@ -34,18 +34,50 @@ export const todoListGetHandler = [
 ];
 
 // Todoの作成
+// export const todoCreateHandler = [
+//   http.post("https://example.com/todos", () => {
+//     return HttpResponse.json(
+//       {
+//         id: "abc12345-e89b-12d3-a456-426614174000",
+//         userId: "123e4567-e89b-12d3-a456-426614174000",
+//         title: "API設計を完了する",
+//         description: "TodoアプリのAPI設計を完了させる",
+//         completed: false,
+//         dueDate: "2024-05-01T18:00:00Z",
+//         createdAt: "2024-04-28T09:00:00Z",
+//         updatedAt: "2024-04-28T09:00:00Z",
+//       },
+//       { status: 201 },
+//     );
+//   }),
+// ];
+
 export const todoCreateHandler = [
-  http.post("https://example.com/todos", () => {
+  http.post("https://example.com/todos", async ({ request }) => {
+    const body = (await request.json()) as {
+      title: string;
+      description: string;
+      completed?: boolean;
+      dueDate?: string;
+    };
+
+    if (!body.title) {
+      return new HttpResponse(null, {
+        status: 400,
+        statusText: "Title is required",
+      });
+    }
+
     return HttpResponse.json(
       {
-        id: "abc12345-e89b-12d3-a456-426614174000",
+        id: crypto.randomUUID(),
         userId: "123e4567-e89b-12d3-a456-426614174000",
-        title: "API設計を完了する",
-        description: "TodoアプリのAPI設計を完了させる",
-        completed: false,
-        dueDate: "2024-05-01T18:00:00Z",
-        createdAt: "2024-04-28T09:00:00Z",
-        updatedAt: "2024-04-28T09:00:00Z",
+        title: body.title,
+        description: body.description,
+        completed: body.completed ?? false,
+        dueDate: body.dueDate,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       },
       { status: 201 },
     );
@@ -86,8 +118,35 @@ export const todoEditHandler = [
   ),
 ];
 
+// Todoの更新
+export const todoUpdateHandler = [
+  http.put("https://example.com/todos/:id", async ({ request, params }) => {
+    const body = (await request.json()) as {
+      title?: string;
+      description?: string;
+      completed?: boolean;
+      dueDate?: string;
+    };
+
+    return HttpResponse.json(
+      {
+        id: params.id,
+        userId: "123e4567-e89b-12d3-a456-426614174000",
+        title: body.title ?? "タイトル",
+        description: body.description ?? "説明",
+        completed: body.completed ?? false,
+        dueDate: body.dueDate,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      { status: 200 },
+    );
+  }),
+];
+
 export const todoHandlers = [
   ...todoListGetHandler,
   ...todoCreateHandler,
   ...todoEditHandler,
+  ...todoUpdateHandler,
 ];

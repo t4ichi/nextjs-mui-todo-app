@@ -1,6 +1,3 @@
-"use client";
-
-import { createTodo, updateTodo } from "@/features/todo/fetchers";
 import {
   Alert,
   Box,
@@ -18,10 +15,12 @@ import { useForm } from "@tanstack/react-form";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { z } from "zod";
+import { createTodo, updateTodo } from "../../actions";
 
 interface TodoFormProps {
   todoId: string;
-  onSubmitSuccessAction: () => void;
+  onSubmit: () => void;
+  onCancel: () => void;
   initialData?: {
     title: string;
     description?: string;
@@ -32,13 +31,19 @@ interface TodoFormProps {
 
 export const TodoForm: React.FC<TodoFormProps> = ({
   todoId,
-  onSubmitSuccessAction,
+  onSubmit,
+  onCancel,
   initialData,
 }) => {
   const [error, setError] = useState<string | null>(null);
   // TanStack Form でフォーム状態を管理
   const form = useForm({
-    defaultValues: initialData,
+    defaultValues: {
+      title: initialData?.title ?? "",
+      description: initialData?.description ?? "",
+      completed: initialData?.completed ?? false,
+      dueDate: initialData?.dueDate ?? null,
+    },
     onSubmit: async ({ value }) => {
       const submitData = {
         ...value,
@@ -50,7 +55,7 @@ export const TodoForm: React.FC<TodoFormProps> = ({
         : await createTodo(submitData); // 作成
 
       if (result.ok) {
-        onSubmitSuccessAction();
+        onSubmit();
       } else {
         setError("処理に失敗しました");
       }
@@ -142,8 +147,13 @@ export const TodoForm: React.FC<TodoFormProps> = ({
           </form.Field>
 
           <Box display="flex" justifyContent="flex-end" gap={2}>
-            <Button onClick={onSubmitSuccessAction}>キャンセル</Button>
-            <Button type="submit" variant="contained" color="primary">
+            <Button onClick={onCancel}>キャンセル</Button>
+            <Button
+              onClick={onSubmit}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
               {todoId ? "更新する" : "作成する"}
             </Button>
           </Box>

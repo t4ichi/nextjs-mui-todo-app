@@ -1,15 +1,30 @@
-import { action } from "@storybook/addon-actions";
 import type { Meta, StoryObj } from "@storybook/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { DialogsProvider } from "@toolpad/core/useDialogs";
 import dayjs from "dayjs";
+import { todoUpdateHandler } from "../../mocks";
 import { TodoList } from "./todo-list";
 
+const queryClient = new QueryClient();
 const meta = {
   title: "features/todo/components/todo-list",
   component: TodoList,
   parameters: {
     layout: "padded",
+    msw: {
+      handlers: [todoUpdateHandler],
+    },
   },
   tags: ["autodocs"],
+  decorators: [
+    (Story) => (
+      <QueryClientProvider client={queryClient}>
+        <DialogsProvider>
+          <Story />
+        </DialogsProvider>
+      </QueryClientProvider>
+    ),
+  ],
 } satisfies Meta<typeof TodoList>;
 
 export default meta;
@@ -30,10 +45,13 @@ const generateTodos = (count: number) => {
 };
 
 const baseArgs = {
-  onToggleComplete: action("onToggleComplete"),
-  onEdit: action("onEdit"),
-  onDelete: action("onDelete"),
-  onPageChange: action("onPageChange"),
+  onToggleComplete: (id: string, completed: boolean) =>
+    alert(
+      `タスクの完了状態を切り替えました\nID: ${id}\n完了状態: ${completed}`,
+    ),
+  onDelete: (id: string) => alert(`タスクを削除します\nID: ${id}`),
+  onPageChange: (page: number) =>
+    alert(`ページを変更します\nページ番号: ${page}`),
 };
 
 export const Default: Story = {
@@ -43,6 +61,11 @@ export const Default: Story = {
     total: 3,
     page: 1,
     limit: 10,
+  },
+  parameters: {
+    msw: {
+      handlers: [todoUpdateHandler],
+    },
   },
 };
 

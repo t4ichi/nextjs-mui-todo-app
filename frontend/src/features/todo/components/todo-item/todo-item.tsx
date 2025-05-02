@@ -5,20 +5,24 @@ import {
   CardContent,
   Checkbox,
   Chip,
+  Dialog,
+  DialogContent,
   IconButton,
   Stack,
   Typography,
 } from "@mui/material";
 import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
+import { useDialogs } from "@toolpad/core/useDialogs";
 import dayjs from "dayjs";
+import { updateTodo } from "../../actions";
 import type { Todo } from "../../types";
+import { TodoForm } from "../todo-form";
 
 type TodoItemProps = Pick<
   Todo,
   "id" | "title" | "description" | "completed" | "dueDate" | "createdAt"
 > & {
-  onToggleComplete: (id: string) => void;
-  onEdit: (id: string) => void;
   onDelete: (id: string) => void;
 };
 
@@ -29,17 +33,56 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   completed,
   dueDate,
   createdAt,
-  onToggleComplete,
-  onEdit,
   onDelete,
 }) => {
+  const dialogs = useDialogs();
+  const toggleComplete = useMutation({
+    mutationFn: async ({
+      id,
+      completed,
+    }: {
+      id: string;
+      completed: boolean;
+    }) => {
+      const result = await updateTodo(id, { completed });
+      if (!result.ok) {
+        throw new Error(result.error);
+      }
+      return result.value;
+    },
+    onSuccess: () => {},
+  });
+
+  const handleEdit = async (id: string) => {
+    await dialogs.open(({ open, onClose }) => (
+      <Dialog fullWidth open={open} onClose={onClose}>
+        <DialogContent>
+          <TodoForm
+            todoId={id}
+            initialData={{
+              title,
+              description,
+              completed,
+              dueDate,
+            }}
+            onSubmit={() => {
+              onClose(false);
+            }}
+            onCancel={() => {
+              onClose(false);
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+    ));
+  };
   // Todo項目のフォーム状態管理
   const form = useForm({
     defaultValues: {
       completed,
     },
     onSubmit: async () => {
-      onToggleComplete(id);
+      await toggleComplete.mutateAsync({ id, completed: completed });
     },
   });
 
@@ -112,7 +155,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
             </Box>
           </Box>
           <Box>
-            <IconButton size="small" onClick={() => onEdit(id)}>
+            <IconButton size="small" onClick={() => handleEdit(id)}>
               <EditIcon />
             </IconButton>
             <IconButton size="small" onClick={() => onDelete(id)}>

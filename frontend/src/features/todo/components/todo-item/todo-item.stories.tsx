@@ -1,18 +1,36 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { DialogsProvider } from "@toolpad/core/useDialogs";
 import dayjs from "dayjs";
+import { todoUpdateHandler } from "../../mocks";
 import { TodoItem } from "./todo-item";
 
+const queryClient = new QueryClient();
 const meta: Meta<typeof TodoItem> = {
   title: "features/todo/components/todo-item",
   component: TodoItem,
+  decorators: [
+    (Story) => (
+      <QueryClientProvider client={queryClient}>
+        <DialogsProvider>
+          <Story />
+        </DialogsProvider>
+      </QueryClientProvider>
+    ),
+  ],
+  parameters: {
+    msw: {
+      handlers: [todoUpdateHandler],
+    },
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof TodoItem>;
 
 const commonProps = {
-  onToggleComplete: (id: string) => alert(`Toggle complete: ${id}`),
-  onEdit: (id: string) => alert(`Edit: ${id}`),
+  onToggleComplete: (id: string, completed: boolean) =>
+    alert(`Toggle complete: ${id}, completed: ${completed}`),
   onDelete: (id: string) => alert(`Delete: ${id}`),
 };
 

@@ -16,8 +16,6 @@ interface TodoListProps {
   limit: number;
   isLoading?: boolean;
   onPageChange: (page: number) => void;
-  onToggleComplete: (id: string) => void;
-  onEdit: (id: string) => void;
   onDelete: (id: string) => void;
 }
 
@@ -28,8 +26,6 @@ export const TodoList: React.FC<TodoListProps> = ({
   limit,
   isLoading = false,
   onPageChange,
-  onToggleComplete,
-  onEdit,
   onDelete,
 }) => {
   const pageCount = Math.ceil(total / limit);
@@ -79,8 +75,6 @@ export const TodoList: React.FC<TodoListProps> = ({
             completed={todo.completed}
             dueDate={todo.dueDate}
             createdAt={todo.createdAt}
-            onToggleComplete={onToggleComplete}
-            onEdit={onEdit}
             onDelete={onDelete}
           />
         ))}
