@@ -10,7 +10,15 @@ import "@fontsource/roboto/700.css";
 import "@fontsource/material-icons";
 
 // MSWの初期化
-initialize();
+let options = {};
+if (location.hostname === "t4ichi.github.io") {
+  options = {
+    serviceWorker: {
+      url: "/nextjs-mui-todo-app/mockServiceWorker.js",
+    },
+  };
+}
+initialize(options);
 
 const preview: Preview = {
   parameters: {
