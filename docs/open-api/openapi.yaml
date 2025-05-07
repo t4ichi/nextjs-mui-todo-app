@@ -12,6 +12,7 @@ servers:
   - url: https://staging.todo-app.example
     description: ステージング環境
 
+
 paths:
   # ユーザー登録
   /sign-up:
